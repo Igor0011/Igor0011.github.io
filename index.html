@@ -1,1 +1,317 @@
-hello world
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Igor Josipović — Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #0E2A47;
+    --ink-deep: #081B30;
+    --grid: rgba(159, 179, 200, 0.14);
+    --paper: #EDF2F7;
+    --steel: #9FB3C8;
+    --amber: #FFB454;
+    --mint: #6EE7B7;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  body{
+    background: var(--ink);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    color: var(--paper);
+    font-family: var(--sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; }
+
+  .wrap{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- corner-bracket panel, the recurring motif ---------- */
+  .panel{
+    position: relative;
+    border: 1px solid rgba(159,179,200,0.35);
+    background: rgba(8, 27, 48, 0.4);
+    padding: 32px;
+  }
+  .panel::before, .panel::after,
+  .panel .br-tl, .panel .br-br { content:''; position:absolute; width:14px; height:14px; }
+  .panel::before{ top:-1px; left:-1px; border-top:2px solid var(--amber); border-left:2px solid var(--amber); }
+  .panel::after{ top:-1px; right:-1px; border-top:2px solid var(--amber); border-right:2px solid var(--amber); }
+  .panel .br-tl{ bottom:-1px; left:-1px; border-bottom:2px solid var(--amber); border-left:2px solid var(--amber); }
+  .panel .br-br{ bottom:-1px; right:-1px; border-bottom:2px solid var(--amber); border-right:2px solid var(--amber); }
+
+  .tag-label{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+
+  /* ---------- header ---------- */
+  header{ padding: 48px 0 24px; }
+  .brand-row{
+    display:flex; justify-content: space-between; align-items:center;
+    font-family: var(--mono); font-size: 13px; color: var(--steel);
+  }
+  .status-dot{ display:inline-block; width:8px; height:8px; border-radius:50%; background: var(--mint); margin-right:8px; box-shadow: 0 0 8px var(--mint); }
+
+  /* ---------- hero / system diagram ---------- */
+  .hero{ padding: 40px 0 80px; }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items:center;
+  }
+  @media (max-width: 800px){ .hero-grid{ grid-template-columns: 1fr; } }
+
+  .eyebrow{ font-family: var(--mono); color: var(--amber); font-size: 13px; letter-spacing: 0.1em; margin-bottom: 18px; }
+  .eyebrow::before{ content:'// '; color: var(--steel); }
+
+  h1{
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+  h1 span{ color: var(--amber); }
+
+  .lede{ color: var(--steel); font-size: 17px; max-width: 46ch; margin-bottom: 28px; }
+
+  .meta-row{ display:flex; flex-wrap:wrap; gap: 10px 18px; font-family: var(--mono); font-size: 13px; color: var(--steel); margin-bottom: 32px; }
+  .meta-row span::before{ content:'▸ '; color: var(--amber); }
+
+  .cta-row{ display:flex; gap: 14px; flex-wrap: wrap; }
+  .btn{
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em;
+    padding: 12px 20px; border: 1px solid var(--amber); color: var(--amber);
+    text-decoration: none; transition: all .15s ease;
+  }
+  .btn:hover{ background: var(--amber); color: var(--ink-deep); }
+  .btn.ghost{ border-color: rgba(159,179,200,0.4); color: var(--steel); }
+  .btn.ghost:hover{ background: rgba(159,179,200,0.12); color: var(--paper); }
+
+  /* schematic node diagram */
+  .schema{ position:relative; width:100%; aspect-ratio: 1/1; max-width:380px; margin: 0 auto; }
+  .node{
+    position:absolute; font-family: var(--mono); font-size: 11px; letter-spacing:.05em;
+    border: 1px solid rgba(159,179,200,.5); background: rgba(14,42,71,.85);
+    padding: 8px 12px; white-space:nowrap; color: var(--steel);
+  }
+  .node.core{ color: var(--amber); border-color: var(--amber); font-size: 12px; padding: 12px 18px; }
+  .node.n1{ top: 0; left: 50%; transform: translateX(-50%); }
+  .node.n2{ top: 28%; left: 2%; }
+  .node.n3{ top: 28%; right: 2%; }
+  .node.n4{ bottom: 22%; left: 6%; }
+  .node.n5{ bottom: 22%; right: 6%; }
+  .node.n6{ bottom: 0; left: 50%; transform: translateX(-50%); }
+
+  .schema svg{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+  .schema svg line{ stroke: rgba(255,180,84,0.45); stroke-width: 1; stroke-dasharray: 3 4; }
+
+  /* ---------- section shell ---------- */
+  section{ padding: 64px 0; }
+  .section-head{ display:flex; align-items:baseline; gap:16px; margin-bottom: 36px; }
+  .section-num{ font-family: var(--mono); color: var(--amber); font-size: 14px; }
+  .section-title{ font-family: var(--mono); font-size: 22px; font-weight:600; }
+  .section-rule{ flex:1; height:1px; background: rgba(159,179,200,0.25); }
+
+  /* ---------- about ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  @media (max-width: 800px){ .about-grid{ grid-template-columns: 1fr; } }
+  .about-text p{ color: var(--steel); margin-bottom: 16px; }
+  .about-text strong{ color: var(--paper); }
+
+  .stack-list{ display:flex; flex-direction: column; gap: 10px; }
+  .stack-row{ display:flex; justify-content: space-between; font-family: var(--mono); font-size: 13px; border-bottom: 1px dashed rgba(159,179,200,0.25); padding-bottom: 8px; }
+  .stack-row .k{ color: var(--steel); }
+  .stack-row .v{ color: var(--paper); text-align:right; }
+
+  /* ---------- projects ---------- */
+  .project{ margin-bottom: 28px; }
+  .project-head{ display:flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .project-title{ font-family: var(--mono); font-size: 17px; color: var(--paper); font-weight:600; }
+  .project-year{ font-family: var(--mono); font-size: 12px; color: var(--amber); }
+  .project-desc{ color: var(--steel); font-size: 15px; margin-bottom: 14px; }
+  .tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag{ font-family: var(--mono); font-size: 11px; padding: 4px 10px; border: 1px solid rgba(110,231,183,0.4); color: var(--mint); letter-spacing: 0.03em; }
+
+  /* ---------- footer / contact ---------- */
+  footer{ padding: 60px 0 48px; }
+  .contact-panel{ text-align:center; }
+  .contact-panel .section-title{ font-size: 26px; margin-bottom: 12px; }
+  .contact-panel p{ color: var(--steel); margin-bottom: 28px; }
+  .contact-links{ display:flex; justify-content:center; gap: 16px; flex-wrap: wrap; }
+  .foot-note{ text-align:center; margin-top: 40px; font-family: var(--mono); font-size: 12px; color: rgba(159,179,200,0.5); }
+
+  /* reveal on scroll */
+  .reveal{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand-row">
+      <span><span class="status-dot"></span>AVAILABLE — REMOTE / CONTRACT</span>
+      <span>BELGRADE, RS · UTC+2</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">full-stack-developer.spec</div>
+        <h1>Igor<br>Josipović<span>.</span></h1>
+        <p class="lede">I build full-stack systems for companies that can't afford things to break — e-commerce platforms, custom CMS, and the APIs that hold enterprise operations together.</p>
+        <div class="meta-row">
+          <span>2.5+ yrs experience</span>
+          <span>PHP / Laravel · C# / .NET</span>
+          <span>Open to EU &amp; US remote</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn" href="mailto:josipovicigor135@gmail.com">Email me</a>
+          <a class="btn ghost" href="#projects">View projects</a>
+        </div>
+      </div>
+
+      <div class="schema" aria-hidden="true">
+        <svg viewBox="0 0 380 380">
+          <line x1="190" y1="40" x2="190" y2="150"></line>
+          <line x1="60" y1="130" x2="180" y2="170"></line>
+          <line x1="320" y1="130" x2="200" y2="170"></line>
+          <line x1="60" y1="280" x2="180" y2="200"></line>
+          <line x1="320" y1="280" x2="200" y2="200"></line>
+          <line x1="190" y1="230" x2="190" y2="340"></line>
+        </svg>
+        <div class="node n1">CLIENT REQUEST</div>
+        <div class="node n2">LARAVEL / MVC</div>
+        <div class="node n3">ASP.NET MVC</div>
+        <div class="node core" style="top:44%; left:50%; transform:translate(-50%,-50%);">IGOR</div>
+        <div class="node n4">MySQL SCHEMA</div>
+        <div class="node n5">3RD-PARTY API</div>
+        <div class="node n6">SHIPPED PRODUCT</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="reveal">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <span class="section-title">About</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p><strong>Software engineer</strong> with 2.5+ years building full-stack web applications for enterprise clients — companies with 100+ employees where downtime and bad data aren't an option.</p>
+        <p>My work spans the full stack: from <strong>database architecture and query optimization</strong> to the front-end interactions users actually touch. I've integrated payment gateways, WHMCS billing systems, domain/WHOIS APIs, and built custom CMS platforms from scratch.</p>
+        <p>Currently at <strong>Zea Stim R&D</strong>, working across e-commerce, hosting automation, and internal enterprise tooling.</p>
+      </div>
+      <div class="stack-list">
+        <div class="stack-row"><span class="k">Languages</span><span class="v">PHP · C# · JavaScript · SQL</span></div>
+        <div class="stack-row"><span class="k">Frameworks</span><span class="v">Laravel · ASP.NET MVC</span></div>
+        <div class="stack-row"><span class="k">Database</span><span class="v">MySQL · Schema Design · Optimization</span></div>
+        <div class="stack-row"><span class="k">APIs</span><span class="v">REST · WHMCS · Payment Gateways</span></div>
+        <div class="stack-row"><span class="k">Tools</span><span class="v">GitLab · Postman · Linux</span></div>
+        <div class="stack-row"><span class="k">Education</span><span class="v">IT, ITS Belgrade (2019–2023)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="reveal">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-title">Projects</span>
+      <span class="section-rule"></span>
+    </div>
+
+    <div class="panel project">
+      <span class="br-tl"></span><span class="br-br"></span>
+      <div class="project-head">
+        <span class="project-title">Hypraenergy — E-Commerce Platform</span>
+        <span class="project-year">2026</span>
+      </div>
+      <p class="project-desc">Interactive web shop with a full checkout workflow and a custom-built CMS. Added smooth page transitions and animated counters to lift the front-end experience above a standard storefront.</p>
+      <div class="tags"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Custom CMS</span><span class="tag">Checkout Flow</span></div>
+    </div>
+
+    <div class="panel project">
+      <span class="br-tl"></span><span class="br-br"></span>
+      <div class="project-head">
+        <span class="project-title">Social Enterprises Platform — NALED</span>
+        <span class="project-year">2026</span>
+      </div>
+      <p class="project-desc">Registration platform with multi-criteria filtering and a centralized search engine that sorts results into blogs, news, and business profiles in real time. Paired with an internal CMS for full layout and content control.</p>
+      <div class="tags"><span class="tag">PHP</span><span class="tag">Search Engine</span><span class="tag">Custom CMS</span></div>
+    </div>
+
+    <div class="panel project">
+      <span class="br-tl"></span><span class="br-br"></span>
+      <div class="project-head">
+        <span class="project-title">Enterprise E-Commerce &amp; Hosting — Akton</span>
+        <span class="project-year">2025</span>
+      </div>
+      <p class="project-desc">Hosting/domain e-commerce system integrated with WHMCS for automated provisioning. Built real-time WHOIS checks, secure card payments, and dynamic NBS payment-slip generation, alongside a custom CMS and blog.</p>
+      <div class="tags"><span class="tag">WHMCS API</span><span class="tag">Payment Gateway</span><span class="tag">WHOIS Integration</span></div>
+    </div>
+
+    <div class="panel project">
+      <span class="br-tl"></span><span class="br-br"></span>
+      <div class="project-head">
+        <span class="project-title">Timesheet &amp; Project Management System — NALED</span>
+        <span class="project-year">2024</span>
+      </div>
+      <p class="project-desc">Resource-allocation system for a 100+ employee organization. Built an interactive matrix UI with real-time hour calculations, lumpsum entry modes, and high-performance API sync between two enterprise systems.</p>
+      <div class="tags"><span class="tag">PHP</span><span class="tag">JavaScript</span><span class="tag">MySQL</span><span class="tag">API Sync</span></div>
+    </div>
+  </section>
+
+  <footer class="reveal">
+    <div class="panel contact-panel">
+      <span class="br-tl"></span><span class="br-br"></span>
+      <div class="tag-label" style="margin-bottom:14px;">end-of-file</div>
+      <div class="section-title">Let's build something that has to work.</div>
+      <p>Open to remote, full-time or contract roles — EU-based teams especially welcome given timezone overlap.</p>
+      <div class="contact-links">
+        <a class="btn" href="mailto:josipovicigor135@gmail.com">josipovicigor135@gmail.com</a>
+        <a class="btn ghost" href="tel:+381652504384">+381 65 250 4384</a>
+      </div>
+    </div>
+    <div class="foot-note">© 2026 IGOR JOSIPOVIĆ — BUILT WITH HTML / CSS, NO FRAMEWORK</div>
+  </footer>
+</div>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
