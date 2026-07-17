@@ -1,1 +1,394 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project — Igor Josipović</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #0E2A47;
+    --ink-deep: #081B30;
+    --paper: #EDF2F7;
+    --steel: #9FB3C8;
+    --amber: #FFB454;
+    --mint: #6EE7B7;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  body{
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  a{ color: inherit; }
+
+  #bg-canvas{
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .wrap{
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- corner-bracket panel motif ---------- */
+  .panel{
+    position: relative;
+    border: 1px solid rgba(159,179,200,0.35);
+    background: rgba(8, 27, 48, 0.55);
+    backdrop-filter: blur(2px);
+    padding: 32px;
+  }
+  .panel::before, .panel::after,
+  .panel .br-tl, .panel .br-br { content:''; position:absolute; width:14px; height:14px; }
+  .panel::before{ top:-1px; left:-1px; border-top:2px solid var(--amber); border-left:2px solid var(--amber); }
+  .panel::after{ top:-1px; right:-1px; border-top:2px solid var(--amber); border-right:2px solid var(--amber); }
+  .panel .br-tl{ bottom:-1px; left:-1px; border-bottom:2px solid var(--amber); border-left:2px solid var(--amber); }
+  .panel .br-br{ bottom:-1px; right:-1px; border-bottom:2px solid var(--amber); border-right:2px solid var(--amber); }
+
+  .tag-label{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+
+  /* ---------- header / back link ---------- */
+  header{ padding: 40px 0 24px; }
+  .back-link{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family: var(--mono); font-size: 13px; color: var(--steel);
+    text-decoration:none; border: 1px solid rgba(159,179,200,0.35);
+    padding: 8px 14px; transition: all .15s ease;
+  }
+  .back-link:hover{ color: var(--amber); border-color: var(--amber); }
+
+  /* ---------- project header block ---------- */
+  .project-hero{ padding: 24px 0 40px; }
+  .eyebrow{ font-family: var(--mono); color: var(--amber); font-size: 13px; letter-spacing: 0.1em; margin-bottom: 14px; }
+  .eyebrow::before{ content:'// '; color: var(--steel); }
+  h1{
+    font-family: var(--mono); font-weight:600;
+    font-size: clamp(26px, 4.5vw, 42px);
+    line-height: 1.2; margin-bottom: 14px;
+  }
+  .project-year-badge{ font-family: var(--mono); font-size: 13px; color: var(--amber); }
+  .project-desc{ color: var(--steel); font-size: 16px; max-width: 62ch; margin: 18px 0 22px; }
+  .tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 8px; }
+  .tag{ font-family: var(--mono); font-size: 11px; padding: 4px 10px; border: 1px solid rgba(110,231,183,0.4); color: var(--mint); letter-spacing: 0.03em; }
+
+  /* ---------- image gallery ---------- */
+  section{ padding: 20px 0 64px; }
+  .section-head{ display:flex; align-items:baseline; gap:16px; margin-bottom: 28px; }
+  .section-num{ font-family: var(--mono); color: var(--amber); font-size: 14px; }
+  .section-title{ font-family: var(--mono); font-size: 20px; font-weight:600; }
+  .section-rule{ flex:1; height:1px; background: rgba(159,179,200,0.25); }
+
+  .gallery{ display: flex; flex-direction: column; gap: 22px; }
+  .gallery-item{
+    position: relative;
+    border: 1px solid rgba(159,179,200,0.3);
+    background:
+      repeating-linear-gradient(45deg, rgba(159,179,200,0.07) 0 10px, transparent 10px 20px),
+      rgba(8,27,48,0.6);
+    overflow: hidden;
+  }
+  .gallery-item img{ width: 100%; display:block; }
+  .gallery-item.no-img{ aspect-ratio: 16/9; }
+  .gallery-item.no-img img{ display:none; }
+  .gallery-item.no-img::before{
+    content: 'DODAJ LINK KA SLICI';
+    position: absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; color: var(--steel);
+  }
+
+  /* ---------- not found state ---------- */
+  .not-found{ text-align:center; padding: 60px 0; }
+  .not-found .section-title{ font-size: 24px; margin-bottom: 14px; }
+  .not-found p{ color: var(--steel); margin-bottom: 24px; }
+
+  /* ---------- footer nav ---------- */
+  footer{ padding: 40px 0 60px; display:flex; justify-content:space-between; align-items:center; gap: 16px; flex-wrap: wrap; }
+  .btn{
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em;
+    padding: 12px 20px; border: 1px solid var(--amber); color: var(--amber);
+    text-decoration: none; transition: all .15s ease;
+  }
+  .btn:hover{ background: var(--amber); color: var(--ink-deep); }
+  .foot-note{ font-family: var(--mono); font-size: 12px; color: rgba(159,179,200,0.5); }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div class="wrap">
+  <header>
+    <a class="back-link" href="index.html">← Nazad na sve projekte</a>
+  </header>
+
+  <div id="content">
+    <!-- populated by JS -->
+  </div>
+
+  <footer>
+    <a class="btn" href="mailto:josipovicigor135@gmail.com">Email me</a>
+    <span class="foot-note">© 2026 IGOR JOSIPOVIĆ</span>
+  </footer>
+</div>
+
+<script>
+  // ---------------------------------------------------------------
+  // Svi podaci o projektima žive ovde, u jednom nizu objekata.
+  // Za svaki projekat "images" je niz — dodaš koliko god linkova želiš,
+  // stranica ih automatski iscrta jedan ispod drugog (foreach).
+  // ---------------------------------------------------------------
+  const projects = [
+    {
+      id: 1,
+      title: "Hypraenergy — E-Commerce Platform",
+      year: "2026",
+      description: "Interactive web shop with a full checkout workflow and a custom-built CMS. Added smooth page transitions and animated counters to lift the front-end experience above a standard storefront.",
+      tags: ["PHP", "MySQL", "Custom CMS", "Checkout Flow"],
+      images: [
+        "projektislike/Screenshot_20260716_211831.png",
+        "projektislike/Screenshot_20260716_211729.png",
+        "projektislike/Screenshot_20260716_211846.png",
+        "projektislike/Screenshot_20260716_211913.png",
+        "projektislike/Screenshot_20260716_211933.png",
+        "projektislike/Screenshot_20260716_120522.png",
+        "projektislike/Screenshot_20260716_120538.png",
+        
+
+
+
+
+
+      ]
+    },
+    {
+      id: 2,
+      title: "PCFoto — Price Intelligence System",
+      year: "2026",
+      description: "Scraping engine that pulls product data from multiple competitor sources and matches it against PCFoto's own catalog in the database. Gives the company a live read on whether competitors are undercutting a price, so they know exactly when to adjust.",
+      tags: ["Web Scraping", "Price Matching", "MySQL"],
+      images: [
+        "projektislike/Screenshot_20260716_214712.png"
+      ]
+    },
+    {
+      id: 3,
+      title: "Social Enterprises Platform — NALED",
+      year: "2026",
+      description: "Registration platform with multi-criteria filtering and a centralized search engine that sorts results into blogs, news, and business profiles in real time. Paired with an internal CMS for full layout and content control.",
+      tags: ["PHP", "Search Engine", "Custom CMS"],
+      images: [
+        "projektislike/Screenshot_20260716_212334.png",
+        "projektislike/Screenshot_20260716_120325.png",
+        "projektislike/Screenshot_20260716_120333.png",
+        "projektislike/Screenshot_20260716_120344.png"
+      ]
+    },
+    {
+      id: 4,
+      title: "Nice-HR — NALED",
+      year: "2025",
+      description: "Extension of an existing NALED Laravel system, focused on API synchronization with the organization's timesheet platform — keeping employees, engagements, and projects consistent across both systems. Also built out the notification system, including database-tracked delivery and read/seen status.",
+      tags: ["Laravel", "API Sync", "Notifications"],
+      images: [
+        "projektislike/Screenshot_20260716_214155.png"
+      ]
+    },
+    {
+      id: 5,
+      title: "Enterprise E-Commerce & Hosting — Akton",
+      year: "2025",
+      description: "Hosting/domain e-commerce system integrated with WHMCS for automated provisioning. Built real-time WHOIS checks, secure card payments, and dynamic NBS payment-slip generation, alongside a custom CMS and blog.",
+      tags: ["WHMCS API", "Payment Gateway", "WHOIS Integration"],
+      images: [
+          "projektislike/Screenshot_20260716_115821.png",
+          "projektislike/Screenshot_20260716_115833.png",
+          "projektislike/Screenshot_20260716_115853.png",
+          "projektislike/Screenshot_20260716_212022.png",
+          "projektislike/Screenshot_20260716_212210.png",
+          "projektislike/Screenshot_20260716_212255.png",
+      ]
+    },
+    {
+      id: 6,
+      title: "GPON Installation Scheduler — Telekom",
+      year: "2024",
+      description: "Object-oriented system built for Telekom to manage internet installation appointments — reservation scheduling, client records, and organizational tracking. Includes a visual calendar, linked object relationships, and complex multi-table data structures for managing installations at scale.",
+      tags: ["OOP", "Visual Calendar", "Complex Data Modeling"],
+      images: [
+          "projektislike/Screenshot_20260716_120237.png",
+        "projektislike/Screenshot_20260716_214556.png"
+        
+      ]
+    },
+    {
+      id: 7,
+      title: "Timesheet & Project Management System — NALED",
+      year: "2024",
+      description: "Resource-allocation system for a 100+ employee organization. Built an interactive matrix UI with real-time hour calculations, lumpsum entry modes, and high-performance API sync between two enterprise systems.",
+      tags: ["PHP", "JavaScript", "MySQL", "API Sync"],
+      images: [
+        "projektislike/Screenshot_20260716_113315.png",
+        "projektislike/Screenshot_20260716_113356.png",
+        "projektislike/Screenshot_20260716_113432.png",
+        "projektislike/Screenshot_20260716_115550.png",
+        "projektislike/Screenshot_20260716_115645.png",
+        "projektislike/Screenshot_20260716_115656.png",
+        "projektislike/Screenshot_20260716_115708.png",
+        "projektislike/Screenshot_20260716_115722.png",
+        "projektislike/Screenshot_20260716_115801.png",
+        "projektislike/Screenshot_20260716_115745.png"
+      ]
+    }
+  ];
+
+  function render(){
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get('id'), 10);
+    const project = projects.find(p => p.id === id);
+    const content = document.getElementById('content');
+
+    if(!project){
+      content.innerHTML = `
+        <div class="panel not-found">
+          <span class="br-tl"></span><span class="br-br"></span>
+          <div class="tag-label" style="margin-bottom:14px;">404</div>
+          <div class="section-title">Projekat nije pronađen.</div>
+          <p>Proveri da li je ID u URL-u ispravan (npr. project.html?id=1).</p>
+          <a class="btn" href="index.html">Nazad na projekte</a>
+        </div>`;
+      document.title = "Projekat nije pronađen — Igor Josipović";
+      return;
+    }
+
+    document.title = project.title + " — Igor Josipović";
+
+    // Gallery: foreach kroz images niz, jedna slika po redu
+    let galleryHTML = '';
+    project.images.forEach((src, i) => {
+      galleryHTML += `
+        <div class="gallery-item">
+          <img src="${src}" alt="${project.title} — screenshot ${i + 1}" onerror="this.parentElement.classList.add('no-img')">
+        </div>`;
+    });
+
+    const tagsHTML = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+    content.innerHTML = `
+      <div class="project-hero">
+        <div class="eyebrow">project-detail.spec</div>
+        <h1>${project.title}</h1>
+        <span class="project-year-badge">${project.year}</span>
+        <p class="project-desc">${project.description}</p>
+        <div class="tags">${tagsHTML}</div>
+      </div>
+      <section>
+        <div class="section-head">
+          <span class="section-num">IMG</span>
+          <span class="section-title">Screenshots</span>
+          <span class="section-rule"></span>
+        </div>
+        <div class="gallery">${galleryHTML}</div>
+      </section>`;
+  }
+
+  render();
+</script>
+
+<script>
+(function(){
+  // Ista mirna scroll-parallax pozadina kao na glavnoj strani.
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const CELL = 48;
+  let w, h, cols, rows, dpr;
+  let docHeight = 1;
+
+  let scrollT = 0;
+  let scrollTEased = 0;
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cols = Math.ceil(w / CELL) + 2;
+    rows = Math.ceil(h / CELL) + 2;
+    docHeight = Math.max(document.documentElement.scrollHeight - h, 1);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function onScroll(){ scrollT = window.scrollY / docHeight; }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  function draw(){
+    ctx.clearRect(0, 0, w, h);
+    scrollTEased += (scrollT - scrollTEased) * 0.06;
+
+    const driftX = (scrollTEased - 0.5) * CELL * 0.6;
+    const driftY = scrollTEased * CELL * 1.2;
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(159,179,200,0.055)';
+    ctx.beginPath();
+    for(let x=-1; x<=cols; x++){
+      const gx = x*CELL + (driftX % CELL);
+      ctx.moveTo(gx, 0); ctx.lineTo(gx, h);
+    }
+    for(let y=-1; y<=rows; y++){
+      const gy = y*CELL + (driftY % CELL);
+      ctx.moveTo(0, gy); ctx.lineTo(w, gy);
+    }
+    ctx.stroke();
+
+    requestAnimationFrame(draw);
+  }
+
+  if(reduceMotion){
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(159,179,200,0.055)';
+    ctx.beginPath();
+    for(let x=0; x<=cols; x++){ ctx.moveTo(x*CELL, 0); ctx.lineTo(x*CELL, h); }
+    for(let y=0; y<=rows; y++){ ctx.moveTo(0, y*CELL); ctx.lineTo(w, y*CELL); }
+    ctx.stroke();
+  } else {
+    requestAnimationFrame(draw);
+  }
+})();
+</script>
+
+</body>
+</html>
