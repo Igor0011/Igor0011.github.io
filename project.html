@@ -190,7 +190,7 @@
 
 <div class="wrap">
   <header>
-    <a class="back-link" href="index.html">← Nazad na sve projekte</a>
+    <a class="back-link" id="back-link" href="index.html">← Back to projects</a>
   </header>
 
   <div id="content">
@@ -198,6 +198,9 @@
   </div>
 
   <footer>
+
+    <a class="back-link" id="back-link2" href="index.html">← Back to projects</a>
+
     <a class="btn" href="mailto:josipovicigor135@gmail.com">Email me</a>
     <span class="foot-note">© 2026 IGOR JOSIPOVIĆ</span>
   </footer>
@@ -324,13 +327,18 @@
           <div class="tag-label" style="margin-bottom:14px;">404</div>
           <div class="section-title">Projekat nije pronađen.</div>
           <p>Proveri da li je ID u URL-u ispravan (npr. project.html?id=1).</p>
-          <a class="btn" href="index.html">Nazad na projekte</a>
+          <a class="btn" href="index.html">Back to projects</a>
         </div>`;
       document.title = "Projekat nije pronađen — Igor Josipović";
       return;
     }
 
     document.title = project.title + " — Igor Josipović";
+
+    // "Back to projects" treba da vrati tačno na ovaj projekat, ne na vrh strane
+    document.getElementById('back-link').href = `index.html#project-${project.id}`;
+    
+    document.getElementById('back-link2').href = `index.html#project-${project.id}`;
 
     // Gallery: foreach kroz images niz, jedna slika po redu
     let galleryHTML = '';
