@@ -155,7 +155,7 @@
   .stack-row .v{ color: var(--paper); text-align:right; }
 
   /* ---------- projects ---------- */
-  .project{ margin-bottom: 28px; cursor: pointer; transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease; }
+  .project{ margin-bottom: 28px; cursor: pointer; scroll-margin-top: 100px; transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease; }
   .project:hover{
     transform: translateY(-3px);
     border-color: rgba(255,180,84,0.6);
@@ -165,6 +165,10 @@
   .project:hover .project-title{ color: var(--amber); }
   .project-title{ transition: color .2s ease; }
   .project:focus-visible{ outline: 2px solid var(--amber); outline-offset: 4px; }
+  .project.focused{
+    border-color: var(--amber);
+    box-shadow: 0 0 0 1px rgba(255,180,84,0.5), 0 0 32px rgba(255,180,84,0.25);
+  }
   .project-media{
     position: relative;
     width: 100%;
@@ -285,7 +289,7 @@
       <div class="about-text">
         <p><strong>Software engineer</strong> with 2.5+ years building full-stack web applications for enterprise clients — companies with 100+ employees where downtime and bad data aren't an option.</p>
         <p>My work spans the full stack: from <strong>database architecture and query optimization</strong> to the front-end interactions users actually touch. I've integrated payment gateways, WHMCS billing systems, domain/WHOIS APIs, and built custom CMS platforms from scratch.</p>
-        <p>Currently at <strong>Zea Stim R&D</strong>, working across e-commerce, hosting automation, and internal enterprise tooling.</p>
+        <!-- <p>Currently at <strong>Zea Stim R&D</strong>, working across e-commerce, hosting automation, and internal enterprise tooling.</p> -->
       </div>
       <div class="stack-list">
         <div class="stack-row"><span class="k">Languages</span><span class="v">PHP · C# · JavaScript · SQL</span></div>
@@ -305,7 +309,7 @@
       <span class="section-rule"></span>
     </div>
 
-    <div class="panel project" onclick="location.href='project.html?id=1'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=1'">
+    <div class="panel project" onclick="location.href='project.html?id=1'" id="project-1" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=1'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_211831.png" alt="Hypraenergy — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -318,7 +322,7 @@
       <div class="tags"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Custom CMS</span><span class="tag">Checkout Flow</span></div>
     </div>
 
-    <div class="panel project" onclick="location.href='project.html?id=2'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=2'">
+    <div class="panel project" onclick="location.href='project.html?id=2'" id="project-2" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=2'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_214712.png" alt="PCFoto — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -331,7 +335,7 @@
       <div class="tags"><span class="tag">Web Scraping</span><span class="tag">Price Matching</span><span class="tag">MySQL</span></div>
     </div>
 
-    <div class="panel project" onclick="location.href='project.html?id=3'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=3'">
+    <div class="panel project" onclick="location.href='project.html?id=3'" id="project-3" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=3'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_212334.png" alt="Social Enterprises Platform — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -344,7 +348,7 @@
       <div class="tags"><span class="tag">PHP</span><span class="tag">Search Engine</span><span class="tag">Custom CMS</span></div>
     </div>
 
-    <div class="panel project" onclick="location.href='project.html?id=4'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=4'">
+    <div class="panel project" onclick="location.href='project.html?id=4'" id="project-4" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=4'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_214155.png" alt="Nice-HR — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -357,7 +361,7 @@
       <div class="tags"><span class="tag">Laravel</span><span class="tag">API Sync</span><span class="tag">Notifications</span></div>
     </div>
 
-    <div class="panel project" onclick="location.href='project.html?id=5'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=5'">
+    <div class="panel project" onclick="location.href='project.html?id=5'" id="project-5" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=5'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_212022.png" alt="Enterprise E-Commerce & Hosting — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -370,7 +374,7 @@
       <div class="tags"><span class="tag">WHMCS API</span><span class="tag">Payment Gateway</span><span class="tag">WHOIS Integration</span></div>
     </div>
 
-    <div class="panel project" onclick="location.href='project.html?id=6'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=6'">
+    <div class="panel project" onclick="location.href='project.html?id=6'" id="project-6" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=6'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_214556.png" alt="GPON Installation Scheduler — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -383,7 +387,7 @@
       <div class="tags"><span class="tag">OOP</span><span class="tag">Visual Calendar</span><span class="tag">Complex Data Modeling</span></div>
     </div>
 
-    <div class="panel project" onclick="location.href='project.html?id=7'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=7'">
+    <div class="panel project" onclick="location.href='project.html?id=7'" id="project-7" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=7'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_113315.png" alt="Timesheet & Project Management System — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -418,6 +422,22 @@
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
   revealEls.forEach(el => io.observe(el));
+
+  // Ako se stiže sa project.html preko "Back to projects", URL nosi #project-N —
+  // odmah otkrij tu sekciju (bez čekanja na scroll) i skroluj/istakni taj projekat.
+  if(location.hash && location.hash.startsWith('#project-')){
+    const target = document.querySelector(location.hash);
+    if(target){
+      const parentSection = target.closest('.reveal');
+      if(parentSection){ parentSection.classList.add('in'); io.unobserve(parentSection); }
+
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.add('focused');
+        setTimeout(() => target.classList.remove('focused'), 2200);
+      });
+    }
+  }
 </script>
 
 <script>
