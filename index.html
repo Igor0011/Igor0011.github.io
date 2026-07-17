@@ -155,7 +155,16 @@
   .stack-row .v{ color: var(--paper); text-align:right; }
 
   /* ---------- projects ---------- */
-  .project{ margin-bottom: 28px; }
+  .project{ margin-bottom: 28px; cursor: pointer; transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease; }
+  .project:hover{
+    transform: translateY(-3px);
+    border-color: rgba(255,180,84,0.6);
+    background: rgba(8, 27, 48, 0.75);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  }
+  .project:hover .project-title{ color: var(--amber); }
+  .project-title{ transition: color .2s ease; }
+  .project:focus-visible{ outline: 2px solid var(--amber); outline-offset: 4px; }
   .project-media{
     position: relative;
     width: 100%;
@@ -296,7 +305,7 @@
       <span class="section-rule"></span>
     </div>
 
-    <div class="panel project">
+    <div class="panel project" onclick="location.href='project.html?id=1'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=1'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_211831.png" alt="Hypraenergy — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -309,7 +318,7 @@
       <div class="tags"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Custom CMS</span><span class="tag">Checkout Flow</span></div>
     </div>
 
-    <div class="panel project">
+    <div class="panel project" onclick="location.href='project.html?id=2'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=2'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_214712.png" alt="PCFoto — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -322,7 +331,7 @@
       <div class="tags"><span class="tag">Web Scraping</span><span class="tag">Price Matching</span><span class="tag">MySQL</span></div>
     </div>
 
-    <div class="panel project">
+    <div class="panel project" onclick="location.href='project.html?id=3'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=3'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_212334.png" alt="Social Enterprises Platform — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -335,7 +344,7 @@
       <div class="tags"><span class="tag">PHP</span><span class="tag">Search Engine</span><span class="tag">Custom CMS</span></div>
     </div>
 
-    <div class="panel project">
+    <div class="panel project" onclick="location.href='project.html?id=4'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=4'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_214155.png" alt="Nice-HR — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -348,7 +357,7 @@
       <div class="tags"><span class="tag">Laravel</span><span class="tag">API Sync</span><span class="tag">Notifications</span></div>
     </div>
 
-    <div class="panel project">
+    <div class="panel project" onclick="location.href='project.html?id=5'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=5'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_212022.png" alt="Enterprise E-Commerce & Hosting — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -361,7 +370,7 @@
       <div class="tags"><span class="tag">WHMCS API</span><span class="tag">Payment Gateway</span><span class="tag">WHOIS Integration</span></div>
     </div>
 
-    <div class="panel project">
+    <div class="panel project" onclick="location.href='project.html?id=6'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=6'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_214556.png" alt="GPON Installation Scheduler — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -374,7 +383,7 @@
       <div class="tags"><span class="tag">OOP</span><span class="tag">Visual Calendar</span><span class="tag">Complex Data Modeling</span></div>
     </div>
 
-    <div class="panel project">
+    <div class="panel project" onclick="location.href='project.html?id=7'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project?id=7'">
       <span class="br-tl"></span><span class="br-br"></span>
       <div class="project-media">
         <img src="projektislike/Screenshot_20260716_113315.png" alt="Timesheet & Project Management System — screenshot" onerror="this.parentElement.classList.add('no-img')">
@@ -407,7 +416,7 @@
   const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.15 });
+  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
   revealEls.forEach(el => io.observe(el));
 </script>
 
