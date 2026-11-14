@@ -6,217 +6,34 @@
 <title>Project — Igor Josipović</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink: #0E2A47;
-    --ink-deep: #081B30;
-    --paper: #EDF2F7;
-    --steel: #9FB3C8;
-    --amber: #FFB454;
-    --mint: #6EE7B7;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
-  }
-
-  *{ box-sizing: border-box; margin:0; padding:0; }
-
-  body{
-    background: var(--ink);
-    color: var(--paper);
-    font-family: var(--sans);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  a{ color: inherit; }
-
-  #bg-canvas{
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .wrap{
-    position: relative;
-    z-index: 1;
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 0 28px;
-  }
-
-  /* ---------- corner-bracket panel motif ---------- */
-  .panel{
-    position: relative;
-    border: 1px solid rgba(159,179,200,0.35);
-    background: rgba(8, 27, 48, 0.55);
-    backdrop-filter: blur(2px);
-    padding: 32px;
-  }
-  .panel::before, .panel::after,
-  .panel .br-tl, .panel .br-br { content:''; position:absolute; width:14px; height:14px; }
-  .panel::before{ top:-1px; left:-1px; border-top:2px solid var(--amber); border-left:2px solid var(--amber); }
-  .panel::after{ top:-1px; right:-1px; border-top:2px solid var(--amber); border-right:2px solid var(--amber); }
-  .panel .br-tl{ bottom:-1px; left:-1px; border-bottom:2px solid var(--amber); border-left:2px solid var(--amber); }
-  .panel .br-br{ bottom:-1px; right:-1px; border-bottom:2px solid var(--amber); border-right:2px solid var(--amber); }
-
-  .tag-label{
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--amber);
-  }
-
-  /* ---------- header / back link ---------- */
-  header{ padding: 40px 0 24px; }
-  .back-link{
-    display:inline-flex; align-items:center; gap:8px;
-    font-family: var(--mono); font-size: 13px; color: var(--steel);
-    text-decoration:none; border: 1px solid rgba(159,179,200,0.35);
-    padding: 8px 14px; transition: all .15s ease;
-  }
-  .back-link:hover{ color: var(--amber); border-color: var(--amber); }
-
-  /* ---------- project header block ---------- */
-  .project-hero{ padding: 24px 0 40px; }
-  .eyebrow{ font-family: var(--mono); color: var(--amber); font-size: 13px; letter-spacing: 0.1em; margin-bottom: 14px; }
-  .eyebrow::before{ content:'// '; color: var(--steel); }
-  h1{
-    font-family: var(--mono); font-weight:600;
-    font-size: clamp(26px, 4.5vw, 42px);
-    line-height: 1.2; margin-bottom: 14px;
-  }
-  .project-year-badge{ font-family: var(--mono); font-size: 13px; color: var(--amber); }
-  .project-desc{ color: var(--steel); font-size: 16px; max-width: 62ch; margin: 18px 0 22px; }
-  .tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 8px; }
-  .tag{ font-family: var(--mono); font-size: 11px; padding: 4px 10px; border: 1px solid rgba(110,231,183,0.4); color: var(--mint); letter-spacing: 0.03em; }
-
-  /* ---------- image gallery ---------- */
-  section{ padding: 20px 0 64px; }
-  .section-head{ display:flex; align-items:baseline; gap:16px; margin-bottom: 28px; }
-  .section-num{ font-family: var(--mono); color: var(--amber); font-size: 14px; }
-  .section-title{ font-family: var(--mono); font-size: 20px; font-weight:600; }
-  .section-rule{ flex:1; height:1px; background: rgba(159,179,200,0.25); }
-
-  .gallery{ display: flex; flex-direction: column; gap: 22px; }
-  .gallery-item{
-    position: relative;
-    border: 1px solid rgba(159,179,200,0.3);
-    background:
-      repeating-linear-gradient(45deg, rgba(159,179,200,0.07) 0 10px, transparent 10px 20px),
-      rgba(8,27,48,0.6);
-    overflow: hidden;
-    cursor: zoom-in;
-    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
-  }
-  .gallery-item:hover{
-    border-color: rgba(255,180,84,0.6);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
-  }
-  .gallery-item img{ width: 100%; display:block; transition: transform .3s ease; }
-  .gallery-item:hover img{ transform: scale(1.02); }
-  .gallery-item.no-img{ aspect-ratio: 16/9; cursor: default; }
-  .gallery-item.no-img:hover{ transform:none; box-shadow:none; border-color: rgba(159,179,200,0.3); }
-  .gallery-item.no-img img{ display:none; }
-  .gallery-item.no-img::before{
-    content: 'DODAJ LINK KA SLICI';
-    position: absolute; inset:0;
-    display:flex; align-items:center; justify-content:center;
-    font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; color: var(--steel);
-  }
-
-  /* ---------- lightbox ---------- */
-  .lightbox{
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 5vh 5vw;
-    background: rgba(4, 14, 26, 0.9);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    transition: opacity .2s ease;
-  }
-  .lightbox.open{ display: flex; opacity: 1; }
-  .lightbox img{
-    max-width: 100%;
-    max-height: 90vh;
-    object-fit: contain;
-    border: 1px solid rgba(255,180,84,0.5);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    transform: scale(0.97);
-    transition: transform .2s ease;
-  }
-  .lightbox.open img{ transform: scale(1); }
-  .lightbox-close{
-    position: fixed;
-    top: 24px; right: 28px;
-    font-family: var(--mono); font-size: 13px; letter-spacing: 0.05em;
-    color: var(--steel);
-    border: 1px solid rgba(159,179,200,0.4);
-    padding: 8px 14px;
-    cursor: pointer;
-    background: rgba(8,27,48,0.6);
-    transition: all .15s ease;
-  }
-  .lightbox-close:hover{ color: var(--amber); border-color: var(--amber); }
-
-  /* ---------- not found state ---------- */
-  .not-found{ text-align:center; padding: 60px 0; }
-  .not-found .section-title{ font-size: 24px; margin-bottom: 14px; }
-  .not-found p{ color: var(--steel); margin-bottom: 24px; }
-
-  /* ---------- footer nav ---------- */
-  footer{ padding: 40px 0 60px; display:flex; justify-content:space-between; align-items:center; gap: 16px; flex-wrap: wrap; }
-  .btn{
-    font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em;
-    padding: 12px 20px; border: 1px solid var(--amber); color: var(--amber);
-    text-decoration: none; transition: all .15s ease;
-  }
-  .btn:hover{ background: var(--amber); color: var(--ink-deep); }
-  .foot-note{ font-family: var(--mono); font-size: 12px; color: rgba(159,179,200,0.5); }
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
-
-<div class="wrap">
-  <header>
-    <a class="back-link" id="back-link" href="index.html">← Back to projects</a>
-  </header>
-
-  <div id="content">
-    <!-- populated by JS -->
+<header class="nav">
+  <div class="container">
+    <a class="back" id="back-link" href="index.html#projects">← All projects</a>
+    <a class="brand" href="index.html">Igor Josipović</a>
   </div>
+</header>
 
-  <footer>
+<main id="content" class="container">
+  <!-- filled by script -->
+</main>
 
-    <a class="back-link" id="back-link2" href="index.html">← Back to projects</a>
+<footer class="footer">
+  <div class="container">© 2026 Igor Josipović · Belgrade, Serbia</div>
+</footer>
 
-    <a class="btn" href="mailto:josipovicigor135@gmail.com">Email me</a>
-    <span class="foot-note">© 2026 IGOR JOSIPOVIĆ</span>
-  </footer>
-</div>
-
-<div class="lightbox" id="lightbox">
-  <span class="lightbox-close" id="lightbox-close">ESC ✕</span>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot preview">
+  <button type="button" class="lightbox-close" id="lightbox-close">Close · Esc</button>
   <img id="lightbox-img" src="" alt="">
 </div>
 
 <script>
-  // ---------------------------------------------------------------
-  // Svi podaci o projektima žive ovde, u jednom nizu objekata.
-  // Za svaki projekat "images" je niz — dodaš koliko god linkova želiš,
-  // stranica ih automatski iscrta jedan ispod drugog (foreach).
-  // ---------------------------------------------------------------
+  // All project data lives here. "images" is a list: add as many files as you like
+  // and the gallery draws them in order.
   const projects = [
     {
       id: 1,
@@ -261,7 +78,7 @@
       id: 4,
       title: "Nice-HR — NALED",
       year: "2025",
-      description: "Extension of an existing NALED Laravel system, focused on API synchronization with the organization's timesheet platform — keeping employees, engagements, and projects consistent across both systems. Also built out the notification system, including database-tracked delivery and read/seen status.",
+      description: "Extension of an existing NALED Laravel system, focused on API synchronization with the organization's timesheet platform, keeping employees, engagements, and projects consistent across both systems. Also built out the notification system, including database-tracked delivery and read/seen status.",
       tags: ["Laravel", "API Sync", "Notifications"],
       images: [
         "projektislike/Screenshot_20260716_214155.png"
@@ -286,7 +103,7 @@
       id: 6,
       title: "GPON Installation Scheduler — Telekom",
       year: "2024",
-      description: "Object-oriented system built for Telekom to manage internet installation appointments — reservation scheduling, client records, and organizational tracking. Includes a visual calendar, linked object relationships, and complex multi-table data structures for managing installations at scale.",
+      description: "Object-oriented system built for Telekom to manage internet installation appointments: reservation scheduling, client records, and organizational tracking. Includes a visual calendar, linked object relationships, and complex multi-table data structures for managing installations at scale.",
       tags: ["OOP", "Visual Calendar", "Complex Data Modeling"],
       images: [
         "projektislike/Screenshot_20260716_120237.png",
@@ -314,168 +131,120 @@
     }
   ];
 
+  function esc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
   function render(){
     const params = new URLSearchParams(window.location.search);
     const id = parseInt(params.get('id'), 10);
-    const project = projects.find(p => p.id === id);
+    const index = projects.findIndex(p => p.id === id);
     const content = document.getElementById('content');
 
-    if(!project){
+    if(index === -1){
+      document.title = "Project not found — Igor Josipović";
       content.innerHTML = `
-        <div class="panel not-found">
-          <span class="br-tl"></span><span class="br-br"></span>
-          <div class="tag-label" style="margin-bottom:14px;">404</div>
-          <div class="section-title">Projekat nije pronađen.</div>
-          <p>Proveri da li je ID u URL-u ispravan (npr. project.html?id=1).</p>
-          <a class="btn" href="index.html">Back to projects</a>
+        <div class="notfound">
+          <div class="eyebrow">404</div>
+          <h1 style="font:600 28px/1.2 var(--display)">Project not found</h1>
+          <p>Check that the link ends with a valid id, for example project.html?id=1.</p>
+          <a class="btn btn-primary" href="index.html#projects">Back to projects</a>
         </div>`;
-      document.title = "Projekat nije pronađen — Igor Josipović";
       return;
     }
 
-    document.title = project.title + " — Igor Josipović";
+    const p = projects[index];
+    const prev = projects[(index + projects.length - 1) % projects.length];
+    const next = projects[(index + 1) % projects.length];
 
-    // "Back to projects" treba da vrati tačno na ovaj projekat, ne na vrh strane
-    document.getElementById('back-link').href = `index.html#project-${project.id}`;
-    
-    document.getElementById('back-link2').href = `index.html#project-${project.id}`;
+    document.title = p.title + " — Igor Josipović";
+    document.getElementById('back-link').href = 'index.html#project-' + p.id;
 
-    // Gallery: foreach kroz images niz, jedna slika po redu
-    let galleryHTML = '';
-    project.images.forEach((src, i) => {
-      galleryHTML += `
-        <div class="gallery-item">
-          <img src="${src}" alt="${project.title} — screenshot ${i + 1}" onerror="this.parentElement.classList.add('no-img')" onclick="openLightbox('${src}', '${project.title.replace(/'/g, "\\'")} — screenshot ${i + 1}')">
-        </div>`;
-    });
+    const tagsHTML = p.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('');
 
-    const tagsHTML = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    const galleryHTML = p.images.map((src, i) => `
+      <button type="button" class="shot shot-btn" data-src="${esc(src)}" data-alt="${esc(p.title)} — screenshot ${i + 1}">
+        <span class="frame-bar"><i></i><i></i><i></i></span>
+        <span class="shot-body"><img src="${esc(src)}" alt="${esc(p.title)} — screenshot ${i + 1}" loading="lazy" decoding="async" onerror="this.closest('.shot').classList.add('no-img')"></span>
+      </button>`).join('');
+
+    const othersHTML = projects.filter(o => o.id !== p.id).map(o => `
+      <li><a href="project.html?id=${o.id}">
+        <span class="year">${esc(o.year)}</span>
+        <span class="name">${esc(o.title)}</span>
+        <span class="go">View →</span>
+      </a></li>`).join('');
 
     content.innerHTML = `
-      <div class="project-hero">
-        <div class="eyebrow">project-detail.spec</div>
-        <h1>${project.title}</h1>
-        <span class="project-year-badge">${project.year}</span>
-        <p class="project-desc">${project.description}</p>
-        <div class="tags">${tagsHTML}</div>
-      </div>
-      <section>
-        <div class="section-head">
-          <span class="section-num">IMG</span>
-          <span class="section-title">Screenshots</span>
-          <span class="section-rule"></span>
+      <section class="pitch">
+        <div class="pitch-copy">
+          <div class="eyebrow">Project ${index + 1} / ${projects.length}</div>
+          <h1>${esc(p.title)}</h1>
+          <p class="pitch-desc">${esc(p.description)}</p>
         </div>
-        <div class="gallery">${galleryHTML}</div>
+        <dl class="facts">
+          <div><dt>Year</dt><dd>${esc(p.year)}</dd></div>
+          <div><dt>Built with</dt><dd><div class="tags">${tagsHTML}</div></dd></div>
+          <div><dt>Screenshots</dt><dd>${p.images.length} ${p.images.length === 1 ? 'image' : 'images'}</dd></div>
+        </dl>
+      </section>
+
+      <section class="gallery-wrap">
+        <div class="eyebrow">Screenshots</div>
+        <div class="gallery" id="gallery">${galleryHTML}</div>
+      </section>
+
+      <nav class="pager" aria-label="Other projects">
+        <a class="prev" href="project.html?id=${prev.id}"><small>← Previous</small><strong>${esc(prev.title)}</strong></a>
+        <a class="next" href="project.html?id=${next.id}"><small>Next →</small><strong>${esc(next.title)}</strong></a>
+      </nav>
+
+      <section class="others">
+        <h2>Other projects</h2>
+        <ul>${othersHTML}</ul>
       </section>`;
   }
 
   render();
-</script>
 
-<script>
-  // ---------------------------------------------------------------
-  // Lightbox: klik na sliku je otvara preko celog ekrana.
-  // Zatvara se klikom van same slike (na tamnu pozadinu) ili tasterom Esc.
-  // ---------------------------------------------------------------
+  // Lightbox: click a screenshot to view it full size. Close with the button,
+  // a click on the dark background, or the Esc key.
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const lightboxClose = document.getElementById('lightbox-close');
+  let lastFocus = null;
 
   function openLightbox(src, alt){
+    lastFocus = document.activeElement;
     lightboxImg.src = src;
     lightboxImg.alt = alt || '';
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
+    lightboxClose.focus();
   }
 
   function closeLightbox(){
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
+    if(lastFocus){ lastFocus.focus(); }
   }
 
-  // klik bilo gde na lightbox (tamna pozadina) zatvara ga,
-  // osim ako je klik bio direktno na samu sliku
+  const gallery = document.getElementById('gallery');
+  if(gallery){
+    gallery.addEventListener('click', (e) => {
+      const btn = e.target.closest('.shot-btn');
+      if(!btn || btn.classList.contains('no-img')) return;
+      openLightbox(btn.dataset.src, btn.dataset.alt);
+    });
+  }
+
   lightbox.addEventListener('click', (e) => {
     if(e.target === lightbox){ closeLightbox(); }
   });
-
   lightboxClose.addEventListener('click', closeLightbox);
-
   document.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape' && lightbox.classList.contains('open')){
-      closeLightbox();
-    }
+    if(e.key === 'Escape' && lightbox.classList.contains('open')){ closeLightbox(); }
   });
-</script>
-
-<script>
-(function(){
-  // Ista mirna scroll-parallax pozadina kao na glavnoj strani.
-  const canvas = document.getElementById('bg-canvas');
-  const ctx = canvas.getContext('2d');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const CELL = 48;
-  let w, h, cols, rows, dpr;
-  let docHeight = 1;
-
-  let scrollT = 0;
-  let scrollTEased = 0;
-
-  function resize(){
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = window.innerWidth;
-    h = window.innerHeight;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cols = Math.ceil(w / CELL) + 2;
-    rows = Math.ceil(h / CELL) + 2;
-    docHeight = Math.max(document.documentElement.scrollHeight - h, 1);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  function onScroll(){ scrollT = window.scrollY / docHeight; }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  function draw(){
-    ctx.clearRect(0, 0, w, h);
-    scrollTEased += (scrollT - scrollTEased) * 0.06;
-
-    const driftX = (scrollTEased - 0.5) * CELL * 0.6;
-    const driftY = scrollTEased * CELL * 1.2;
-
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(159,179,200,0.055)';
-    ctx.beginPath();
-    for(let x=-1; x<=cols; x++){
-      const gx = x*CELL + (driftX % CELL);
-      ctx.moveTo(gx, 0); ctx.lineTo(gx, h);
-    }
-    for(let y=-1; y<=rows; y++){
-      const gy = y*CELL + (driftY % CELL);
-      ctx.moveTo(0, gy); ctx.lineTo(w, gy);
-    }
-    ctx.stroke();
-
-    requestAnimationFrame(draw);
-  }
-
-  if(reduceMotion){
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(159,179,200,0.055)';
-    ctx.beginPath();
-    for(let x=0; x<=cols; x++){ ctx.moveTo(x*CELL, 0); ctx.lineTo(x*CELL, h); }
-    for(let y=0; y<=rows; y++){ ctx.moveTo(0, y*CELL); ctx.lineTo(w, y*CELL); }
-    ctx.stroke();
-  } else {
-    requestAnimationFrame(draw);
-  }
-})();
 </script>
 
 </body>
