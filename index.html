@@ -3,522 +3,280 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Igor Josipović — Full-Stack Developer</title>
+<title>Igor Josipović — AI-Driven Software Developer</title>
+<meta name="description" content="Igor Josipović, backend-focused developer from Belgrade building Laravel, Node.js and React applications with AI-assisted development.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink: #0E2A47;
-    --ink-deep: #081B30;
-    --grid: rgba(159, 179, 200, 0.14);
-    --paper: #EDF2F7;
-    --steel: #9FB3C8;
-    --amber: #FFB454;
-    --mint: #6EE7B7;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
-  }
-
-  *{ box-sizing: border-box; margin:0; padding:0; }
-
-  body{
-    background: var(--ink);
-    color: var(--paper);
-    font-family: var(--sans);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  a { color: inherit; }
-
-  #bg-canvas{
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .wrap{
-    position: relative;
-    z-index: 1;
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 0 28px;
-  }
-
-  /* ---------- corner-bracket panel, the recurring motif ---------- */
-  .panel{
-    position: relative;
-    border: 1px solid rgba(159,179,200,0.35);
-    background: rgba(8, 27, 48, 0.55);
-    backdrop-filter: blur(2px);
-    padding: 32px;
-  }
-  .panel::before, .panel::after,
-  .panel .br-tl, .panel .br-br { content:''; position:absolute; width:14px; height:14px; }
-  .panel::before{ top:-1px; left:-1px; border-top:2px solid var(--amber); border-left:2px solid var(--amber); }
-  .panel::after{ top:-1px; right:-1px; border-top:2px solid var(--amber); border-right:2px solid var(--amber); }
-  .panel .br-tl{ bottom:-1px; left:-1px; border-bottom:2px solid var(--amber); border-left:2px solid var(--amber); }
-  .panel .br-br{ bottom:-1px; right:-1px; border-bottom:2px solid var(--amber); border-right:2px solid var(--amber); }
-
-  .tag-label{
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--amber);
-  }
-
-  /* ---------- header ---------- */
-  header{ padding: 48px 0 24px; }
-  .brand-row{
-    display:flex; justify-content: space-between; align-items:center;
-    font-family: var(--mono); font-size: 13px; color: var(--steel);
-  }
-  .status-dot{ display:inline-block; width:8px; height:8px; border-radius:50%; background: var(--mint); margin-right:8px; box-shadow: 0 0 8px var(--mint); }
-
-  /* ---------- hero / system diagram ---------- */
-  .hero{ padding: 40px 0 80px; }
-  .hero-grid{
-    display:grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 40px;
-    align-items:center;
-  }
-  @media (max-width: 800px){ .hero-grid{ grid-template-columns: 1fr; } }
-
-  .eyebrow{ font-family: var(--mono); color: var(--amber); font-size: 13px; letter-spacing: 0.1em; margin-bottom: 18px; }
-  .eyebrow::before{ content:'// '; color: var(--steel); }
-
-  h1{
-    font-family: var(--mono);
-    font-weight: 600;
-    font-size: clamp(32px, 5vw, 52px);
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    margin-bottom: 20px;
-  }
-  h1 span{ color: var(--amber); }
-
-  .lede{ color: var(--steel); font-size: 17px; max-width: 46ch; margin-bottom: 28px; }
-
-  .meta-row{ display:flex; flex-wrap:wrap; gap: 10px 18px; font-family: var(--mono); font-size: 13px; color: var(--steel); margin-bottom: 32px; }
-  .meta-row span::before{ content:'▸ '; color: var(--amber); }
-
-  .cta-row{ display:flex; gap: 14px; flex-wrap: wrap; }
-  .btn{
-    font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em;
-    padding: 12px 20px; border: 1px solid var(--amber); color: var(--amber);
-    text-decoration: none; transition: all .15s ease;
-  }
-  .btn:hover{ background: var(--amber); color: var(--ink-deep); }
-  .btn.ghost{ border-color: rgba(159,179,200,0.4); color: var(--steel); }
-  .btn.ghost:hover{ background: rgba(159,179,200,0.12); color: var(--paper); }
-
-  /* schematic node diagram */
-  .schema{ position:relative; width:100%; aspect-ratio: 1/1; max-width:380px; margin: 0 auto; }
-  .node{
-    position:absolute; font-family: var(--mono); font-size: 11px; letter-spacing:.05em;
-    border: 1px solid rgba(159,179,200,.5); background: rgba(14,42,71,.85);
-    padding: 8px 12px; white-space:nowrap; color: var(--steel);
-  }
-  .node.core{ color: var(--amber); border-color: var(--amber); font-size: 12px; padding: 12px 18px; }
-  .node.n1{ top: 0; left: 50%; transform: translateX(-50%); }
-  .node.n2{ top: 28%; left: 2%; }
-  .node.n3{ top: 28%; right: 2%; }
-  .node.n4{ bottom: 22%; left: 6%; }
-  .node.n5{ bottom: 22%; right: 6%; }
-  .node.n6{ bottom: 0; left: 50%; transform: translateX(-50%); }
-
-  .schema svg{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
-  .schema svg line{ stroke: rgba(255,180,84,0.45); stroke-width: 1; stroke-dasharray: 3 4; }
-
-  /* ---------- section shell ---------- */
-  section{ padding: 64px 0; }
-  .section-head{ display:flex; align-items:baseline; gap:16px; margin-bottom: 36px; }
-  .section-num{ font-family: var(--mono); color: var(--amber); font-size: 14px; }
-  .section-title{ font-family: var(--mono); font-size: 22px; font-weight:600; }
-  .section-rule{ flex:1; height:1px; background: rgba(159,179,200,0.25); }
-
-  /* ---------- about ---------- */
-  .about-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-  @media (max-width: 800px){ .about-grid{ grid-template-columns: 1fr; } }
-  .about-text p{ color: var(--steel); margin-bottom: 16px; }
-  .about-text strong{ color: var(--paper); }
-
-  .stack-list{ display:flex; flex-direction: column; gap: 10px; }
-  .stack-row{ display:flex; justify-content: space-between; font-family: var(--mono); font-size: 13px; border-bottom: 1px dashed rgba(159,179,200,0.25); padding-bottom: 8px; }
-  .stack-row .k{ color: var(--steel); }
-  .stack-row .v{ color: var(--paper); text-align:right; }
-
-  /* ---------- projects ---------- */
-  .project{ margin-bottom: 28px; cursor: pointer; scroll-margin-top: 100px; transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease; }
-  .project:hover{
-    transform: translateY(-3px);
-    border-color: rgba(255,180,84,0.6);
-    background: rgba(8, 27, 48, 0.75);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
-  }
-  .project:hover .project-title{ color: var(--amber); }
-  .project-title{ transition: color .2s ease; }
-  .project:focus-visible{ outline: 2px solid var(--amber); outline-offset: 4px; }
-  .project.focused{
-    border-color: var(--amber);
-    box-shadow: 0 0 0 1px rgba(255,180,84,0.5), 0 0 32px rgba(255,180,84,0.25);
-  }
-  .project-media{
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    margin-bottom: 18px;
-    border: 1px solid rgba(159,179,200,0.3);
-    background:
-      repeating-linear-gradient(45deg, rgba(159,179,200,0.07) 0 10px, transparent 10px 20px),
-      rgba(8,27,48,0.6);
-  }
-  .project-media img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .project-media.no-img img{ display:none; }
-  .project-media.no-img::before{
-    content: 'DODAJ LINK KA SLICI → zameni src="ADD_IMAGE_URL_HERE"';
-    position: absolute;
-    inset: 0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding: 0 16px;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    color: var(--steel);
-  }
-  .project-media.no-img::after{
-    content: '';
-    position:absolute; top:8px; left:8px; width:8px; height:8px;
-    border-top:2px solid var(--amber); border-left:2px solid var(--amber);
-  }
-  .project-head{ display:flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-  .project-title{ font-family: var(--mono); font-size: 17px; color: var(--paper); font-weight:600; }
-  .project-year{ font-family: var(--mono); font-size: 12px; color: var(--amber); }
-  .project-desc{ color: var(--steel); font-size: 15px; margin-bottom: 14px; }
-  .tags{ display:flex; flex-wrap:wrap; gap:8px; }
-  .tag{ font-family: var(--mono); font-size: 11px; padding: 4px 10px; border: 1px solid rgba(110,231,183,0.4); color: var(--mint); letter-spacing: 0.03em; }
-
-  /* ---------- footer / contact ---------- */
-  footer{ padding: 60px 0 48px; }
-  .contact-panel{ text-align:center; }
-  .contact-panel .section-title{ font-size: 26px; margin-bottom: 12px; }
-  .contact-panel p{ color: var(--steel); margin-bottom: 28px; }
-  .contact-links{ display:flex; justify-content:center; gap: 16px; flex-wrap: wrap; }
-  .foot-note{ text-align:center; margin-top: 40px; font-family: var(--mono); font-size: 12px; color: rgba(159,179,200,0.5); }
-
-  /* reveal on scroll */
-  .reveal{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
-  .reveal.in{ opacity:1; transform:none; }
-
-  @media (prefers-reduced-motion: reduce){
-    .reveal{ opacity:1; transform:none; transition:none; }
-  }
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
+<header class="nav">
+  <div class="container">
+    <a class="brand" href="#top">Igor Josipović</a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
 
-<div class="wrap">
-  <header>
-    <div class="brand-row">
-      <span><span class="status-dot"></span>AVAILABLE — REMOTE / CONTRACT</span>
-      <span>BELGRADE, RS · UTC+2</span>
-    </div>
-  </header>
+<main id="top">
 
   <section class="hero">
-    <div class="hero-grid">
-      <div>
-        <div class="eyebrow">full-stack-developer.spec</div>
-        <h1>Igor<br>Josipović<span>.</span></h1>
-        <p class="lede">I build full-stack systems for companies that can't afford things to break — e-commerce platforms, custom CMS, and the APIs that hold enterprise operations together.</p>
-        <div class="meta-row">
-          <span>2.5+ yrs experience</span>
-          <span>PHP / Laravel · C# / .NET</span>
-          <span>Open to EU &amp; US remote</span>
-        </div>
-        <div class="cta-row">
-          <a class="btn" href="mailto:josipovicigor135@gmail.com">Email me</a>
-          <a class="btn ghost" href="#projects">View projects</a>
+    <div class="container">
+      <div class="hero-copy">
+        <div class="eyebrow">AI-driven software developer · Belgrade</div>
+        <h1>Backend developer who ships with AI and reviews every line.</h1>
+        <p class="lead">Eight years of programming, three of them professional, building Laravel, Node.js and React applications. I specialise in API integrations, payment flows and automating manual business processes.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#projects">See projects</a>
+          <a class="btn" href="#contact">Get in touch</a>
         </div>
       </div>
-
-      <div class="schema" aria-hidden="true">
-        <svg viewBox="0 0 380 380">
-          <line x1="190" y1="40" x2="190" y2="150"></line>
-          <line x1="60" y1="130" x2="180" y2="170"></line>
-          <line x1="320" y1="130" x2="200" y2="170"></line>
-          <line x1="60" y1="280" x2="180" y2="200"></line>
-          <line x1="320" y1="280" x2="200" y2="200"></line>
-          <line x1="190" y1="230" x2="190" y2="340"></line>
-        </svg>
-        <div class="node n1">CLIENT REQUEST</div>
-        <div class="node n2">LARAVEL / MVC</div>
-        <div class="node n3">.NET / C#</div>
-        <div class="node core" style="top:44%; left:50%; transform:translate(-50%,-50%);">IGOR</div>
-        <div class="node n4">MySQL SCHEMA</div>
-        <div class="node n5">3RD-PARTY API</div>
-        <div class="node n6">SHIPPED PRODUCT</div>
+      <div class="code-card">
+        <div class="code-head">GET /developer/igor-josipovic · 200 OK</div>
+<pre>{
+  <span class="k">"name"</span>: "Igor Josipović",
+  <span class="k">"role"</span>: "AI-driven software developer",
+  <span class="k">"location"</span>: "Belgrade, Serbia",
+  <span class="k">"years_programming"</span>: 8,
+  <span class="k">"years_professional"</span>: 3,
+  <span class="k">"stack"</span>: ["Laravel", "Node.js",
+    "React", "MySQL"],
+  <span class="k">"languages"</span>: {
+    "Serbian": "native",
+    "English": "advanced"
+  }
+}</pre>
       </div>
     </div>
   </section>
 
-  <section id="about" class="reveal">
-    <div class="section-head">
-      <span class="section-num">01</span>
-      <span class="section-title">About</span>
-      <span class="section-rule"></span>
+  <div class="band">
+    <div class="container stats">
+      <div class="stat"><b>60 s → 10 s</b><span>Report generation time after query optimisation</span></div>
+      <div class="stat"><b>10+ h / week</b><span>Manual work removed through automated processes</span></div>
+      <div class="stat"><b>100+ users</b><span>Employees using the timesheet platform I built</span></div>
     </div>
-    <div class="about-grid">
-      <div class="about-text">
-        <p><strong>Software engineer</strong> with 2.5+ years building full-stack web applications for enterprise clients — companies with 100+ employees where downtime and bad data aren't an option.</p>
-        <p>My work spans the full stack: from <strong>database architecture and query optimization</strong> to the front-end interactions users actually touch. I've integrated payment gateways, WHMCS billing systems, domain/WHOIS APIs, and built custom CMS platforms from scratch.</p>
-        <!-- <p>Currently at <strong>Zea Stim R&D</strong>, working across e-commerce, hosting automation, and internal enterprise tooling.</p> -->
+  </div>
+
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Projects</div>
+        <h2>Systems that replaced manual work</h2>
       </div>
-      <div class="stack-list">
-        <div class="stack-row"><span class="k">Languages</span><span class="v">PHP · C# · JavaScript · SQL</span></div>
-        <div class="stack-row"><span class="k">Frameworks</span><span class="v">Laravel · .NET / C#</span></div>
-        <div class="stack-row"><span class="k">Database</span><span class="v">MySQL · Schema Design · Optimization</span></div>
-        <div class="stack-row"><span class="k">APIs</span><span class="v">REST · WHMCS · Payment Gateways</span></div>
-        <div class="stack-row"><span class="k">Tools</span><span class="v">GitLab · Postman · Linux</span></div>
-        <div class="stack-row"><span class="k">Education</span><span class="v">IT, ITS Belgrade (2019–2023)</span></div>
+
+      <div class="grid">
+
+        <a class="card card-featured" id="project-1" href="project.html?id=1">
+          <div class="shot shot--fixed">
+            <span class="frame-bar"><i></i><i></i><i></i></span>
+            <span class="shot-body"><img src="projektislike/Screenshot_20260716_211831.png" alt="Hypraenergy — screenshot" onerror="this.closest('.shot').classList.add('no-img')"></span>
+          </div>
+          <div class="card-body">
+            <div class="year">2026</div>
+            <h3>Hypraenergy — E-Commerce Platform</h3>
+            <p>Interactive web shop with a full checkout workflow and a custom-built CMS. Added smooth page transitions and animated counters to lift the front-end experience above a standard storefront.</p>
+            <div class="tags"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Custom CMS</span><span class="tag">Checkout Flow</span></div>
+            <div class="more">View project →</div>
+          </div>
+        </a>
+
+        <a class="card" id="project-2" href="project.html?id=2">
+          <div class="shot shot--fixed">
+            <span class="frame-bar"><i></i><i></i><i></i></span>
+            <span class="shot-body"><img src="projektislike/Screenshot_20260716_214712.png" alt="PCFoto — screenshot" onerror="this.closest('.shot').classList.add('no-img')"></span>
+          </div>
+          <div class="card-body">
+            <div class="year">2026</div>
+            <h3>PCFoto — Price Intelligence System</h3>
+            <p>Scraping engine that pulls product data from multiple competitor sources and matches it against PCFoto's own catalog in the database. Gives the company a live read on whether competitors are undercutting a price, so they know exactly when to adjust.</p>
+            <div class="tags"><span class="tag">Web Scraping</span><span class="tag">Price Matching</span><span class="tag">MySQL</span></div>
+          </div>
+        </a>
+
+        <a class="card" id="project-3" href="project.html?id=3">
+          <div class="shot shot--fixed">
+            <span class="frame-bar"><i></i><i></i><i></i></span>
+            <span class="shot-body"><img src="projektislike/Screenshot_20260716_212334.png" alt="Social Enterprises Platform — screenshot" onerror="this.closest('.shot').classList.add('no-img')"></span>
+          </div>
+          <div class="card-body">
+            <div class="year">2026</div>
+            <h3>Social Enterprises Platform — NALED</h3>
+            <p>Registration platform with multi-criteria filtering and a centralized search engine that sorts results into blogs, news, and business profiles in real time. Paired with an internal CMS for full layout and content control.</p>
+            <div class="tags"><span class="tag">PHP</span><span class="tag">Search Engine</span><span class="tag">Custom CMS</span></div>
+          </div>
+        </a>
+
+        <a class="card" id="project-4" href="project.html?id=4">
+          <div class="shot shot--fixed">
+            <span class="frame-bar"><i></i><i></i><i></i></span>
+            <span class="shot-body"><img src="projektislike/Screenshot_20260716_214155.png" alt="Nice-HR — screenshot" onerror="this.closest('.shot').classList.add('no-img')"></span>
+          </div>
+          <div class="card-body">
+            <div class="year">2025</div>
+            <h3>Nice-HR — NALED</h3>
+            <p>Extension of an existing NALED Laravel system, focused on API synchronization with the organization's timesheet platform, keeping employees, engagements, and projects consistent across both systems. Also built out the notification system, including database-tracked delivery and read/seen status.</p>
+            <div class="tags"><span class="tag">Laravel</span><span class="tag">API Sync</span><span class="tag">Notifications</span></div>
+          </div>
+        </a>
+
+        <a class="card" id="project-5" href="project.html?id=5">
+          <div class="shot shot--fixed">
+            <span class="frame-bar"><i></i><i></i><i></i></span>
+            <span class="shot-body"><img src="projektislike/Screenshot_20260716_212022.png" alt="Enterprise E-Commerce &amp; Hosting — screenshot" onerror="this.closest('.shot').classList.add('no-img')"></span>
+          </div>
+          <div class="card-body">
+            <div class="year">2025</div>
+            <h3>Enterprise E-Commerce &amp; Hosting — Akton</h3>
+            <p>Hosting/domain e-commerce system integrated with WHMCS for automated provisioning. Built real-time WHOIS checks, secure card payments, and dynamic NBS payment-slip generation, alongside a custom CMS and blog.</p>
+            <div class="tags"><span class="tag">WHMCS API</span><span class="tag">Payment Gateway</span><span class="tag">WHOIS Integration</span></div>
+          </div>
+        </a>
+
+        <a class="card" id="project-6" href="project.html?id=6">
+          <div class="shot shot--fixed">
+            <span class="frame-bar"><i></i><i></i><i></i></span>
+            <span class="shot-body"><img src="projektislike/Screenshot_20260716_214556.png" alt="GPON Installation Scheduler — screenshot" onerror="this.closest('.shot').classList.add('no-img')"></span>
+          </div>
+          <div class="card-body">
+            <div class="year">2024</div>
+            <h3>GPON Installation Scheduler — Telekom</h3>
+            <p>Object-oriented system built for Telekom to manage internet installation appointments: reservation scheduling, client records, and organizational tracking. Includes a visual calendar, linked object relationships, and complex multi-table data structures for managing installations at scale.</p>
+            <div class="tags"><span class="tag">OOP</span><span class="tag">Visual Calendar</span><span class="tag">Complex Data Modeling</span></div>
+          </div>
+        </a>
+
+        <a class="card" id="project-7" href="project.html?id=7">
+          <div class="shot shot--fixed">
+            <span class="frame-bar"><i></i><i></i><i></i></span>
+            <span class="shot-body"><img src="projektislike/Screenshot_20260716_113315.png" alt="Timesheet &amp; Project Management System — screenshot" onerror="this.closest('.shot').classList.add('no-img')"></span>
+          </div>
+          <div class="card-body">
+            <div class="year">2024</div>
+            <h3>Timesheet &amp; Project Management System — NALED</h3>
+            <p>Resource-allocation system for a 100+ employee organization. Built an interactive matrix UI with real-time hour calculations, lumpsum entry modes, and high-performance API sync between two enterprise systems.</p>
+            <div class="tags"><span class="tag">PHP</span><span class="tag">JavaScript</span><span class="tag">MySQL</span><span class="tag">API Sync</span></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Experience</div>
+        <h2>Where I have worked</h2>
+      </div>
+
+      <div class="job">
+        <div class="job-date">04/2024 – 08/2026</div>
+        <div class="job-main">
+          <div>
+            <h3>Web Developer</h3>
+            <div class="job-org">Zea Stim R&amp;D d.o.o. · Belgrade, Serbia</div>
+          </div>
+          <ul>
+            <li>Designed, developed and maintained web applications with Laravel, Node.js, React and MySQL.</li>
+            <li>Integrated AI APIs to build chatbots, intelligent assistants and automated workflows.</li>
+            <li>Applied AI-assisted workflows for coding, debugging, testing and code analysis, with manual review and validation of every result.</li>
+            <li>Worked with LLM concepts, structured outputs, context management, model evaluation and the fundamentals of model training and fine-tuning.</li>
+            <li>Built an e-commerce and hosting platform on the WHMCS API and a resource allocation and timesheet platform used by over 100 employees.</li>
+            <li>Implemented REST API integrations, authentication, WHOIS checks and payment gateways, saving over 10 hours of manual work per week.</li>
+            <li>Designed schemas, migrations and complex SQL queries, reducing report generation from 60 seconds to 10 seconds.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-date">04/2023 – 04/2024</div>
+        <div class="job-main">
+          <div>
+            <h3>Freelance Developer</h3>
+            <div class="job-org">Belgrade, Serbia</div>
+          </div>
+          <ul>
+            <li>Developed custom web applications and websites in PHP, HTML and CSS with responsive, functional interfaces.</li>
+            <li>Built database-driven solutions and Android applications with custom backend features.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-date">08/2021 – 09/2021</div>
+        <div class="job-main">
+          <div>
+            <h3>Development Intern</h3>
+            <div class="job-org">Asseco SEE d.o.o. · Belgrade, Serbia</div>
+          </div>
+          <ul>
+            <li>Backend development in C# and Python as part of a five-person team.</li>
+            <li>Designed relational databases, wrote SQL stored procedures and assisted with database migrations.</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="projects" class="reveal">
-    <div class="section-head">
-      <span class="section-num">02</span>
-      <span class="section-title">Projects</span>
-      <span class="section-rule"></span>
-    </div>
-
-    <div class="panel project" onclick="location.href='project.html?id=1'" id="project-1" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=1'">
-      <span class="br-tl"></span><span class="br-br"></span>
-      <div class="project-media">
-        <img src="projektislike/Screenshot_20260716_211831.png" alt="Hypraenergy — screenshot" onerror="this.parentElement.classList.add('no-img')">
+  <section class="section" id="skills">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Skills</div>
+        <h2>Tools I work with</h2>
       </div>
-      <div class="project-head">
-        <span class="project-title">Hypraenergy — E-Commerce Platform</span>
-        <span class="project-year">2026</span>
+      <div class="skills">
+        <div class="skill"><h3>Backend</h3><p>Laravel · Node.js · PHP · MVC · OOP · REST APIs · Payment gateways · WHMCS API · Custom CMS development</p></div>
+        <div class="skill"><h3>Data</h3><p>MySQL · Database design · Query optimisation · SQL procedures · Migrations</p></div>
+        <div class="skill"><h3>AI</h3><p>AI-driven development · LLM APIs · Prompt engineering · Structured outputs · Model evaluation</p></div>
+        <div class="skill"><h3>Frontend and tooling</h3><p>React · JavaScript · GitLab · Linux · Postman · Perl</p></div>
       </div>
-      <p class="project-desc">Interactive web shop with a full checkout workflow and a custom-built CMS. Added smooth page transitions and animated counters to lift the front-end experience above a standard storefront.</p>
-      <div class="tags"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Custom CMS</span><span class="tag">Checkout Flow</span></div>
-    </div>
-
-    <div class="panel project" onclick="location.href='project.html?id=2'" id="project-2" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=2'">
-      <span class="br-tl"></span><span class="br-br"></span>
-      <div class="project-media">
-        <img src="projektislike/Screenshot_20260716_214712.png" alt="PCFoto — screenshot" onerror="this.parentElement.classList.add('no-img')">
-      </div>
-      <div class="project-head">
-        <span class="project-title">PCFoto — Price Intelligence System</span>
-        <span class="project-year">2026</span>
-      </div>
-      <p class="project-desc">Scraping engine that pulls product data from multiple competitor sources and matches it against PCFoto's own catalog in the database. Gives the company a live read on whether competitors are undercutting a price, so they know exactly when to adjust.</p>
-      <div class="tags"><span class="tag">Web Scraping</span><span class="tag">Price Matching</span><span class="tag">MySQL</span></div>
-    </div>
-
-    <div class="panel project" onclick="location.href='project.html?id=3'" id="project-3" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=3'">
-      <span class="br-tl"></span><span class="br-br"></span>
-      <div class="project-media">
-        <img src="projektislike/Screenshot_20260716_212334.png" alt="Social Enterprises Platform — screenshot" onerror="this.parentElement.classList.add('no-img')">
-      </div>
-      <div class="project-head">
-        <span class="project-title">Social Enterprises Platform — NALED</span>
-        <span class="project-year">2026</span>
-      </div>
-      <p class="project-desc">Registration platform with multi-criteria filtering and a centralized search engine that sorts results into blogs, news, and business profiles in real time. Paired with an internal CMS for full layout and content control.</p>
-      <div class="tags"><span class="tag">PHP</span><span class="tag">Search Engine</span><span class="tag">Custom CMS</span></div>
-    </div>
-
-    <div class="panel project" onclick="location.href='project.html?id=4'" id="project-4" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=4'">
-      <span class="br-tl"></span><span class="br-br"></span>
-      <div class="project-media">
-        <img src="projektislike/Screenshot_20260716_214155.png" alt="Nice-HR — screenshot" onerror="this.parentElement.classList.add('no-img')">
-      </div>
-      <div class="project-head">
-        <span class="project-title">Nice-HR — NALED</span>
-        <span class="project-year">2025</span>
-      </div>
-      <p class="project-desc">Extension of an existing NALED Laravel system, focused on API synchronization with the organization's timesheet platform — keeping employees, engagements, and projects consistent across both systems. Also built out the notification system, including database-tracked delivery and read/seen status.</p>
-      <div class="tags"><span class="tag">Laravel</span><span class="tag">API Sync</span><span class="tag">Notifications</span></div>
-    </div>
-
-    <div class="panel project" onclick="location.href='project.html?id=5'" id="project-5" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=5'">
-      <span class="br-tl"></span><span class="br-br"></span>
-      <div class="project-media">
-        <img src="projektislike/Screenshot_20260716_212022.png" alt="Enterprise E-Commerce & Hosting — screenshot" onerror="this.parentElement.classList.add('no-img')">
-      </div>
-      <div class="project-head">
-        <span class="project-title">Enterprise E-Commerce &amp; Hosting — Akton</span>
-        <span class="project-year">2025</span>
-      </div>
-      <p class="project-desc">Hosting/domain e-commerce system integrated with WHMCS for automated provisioning. Built real-time WHOIS checks, secure card payments, and dynamic NBS payment-slip generation, alongside a custom CMS and blog.</p>
-      <div class="tags"><span class="tag">WHMCS API</span><span class="tag">Payment Gateway</span><span class="tag">WHOIS Integration</span></div>
-    </div>
-
-    <div class="panel project" onclick="location.href='project.html?id=6'" id="project-6" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=6'">
-      <span class="br-tl"></span><span class="br-br"></span>
-      <div class="project-media">
-        <img src="projektislike/Screenshot_20260716_214556.png" alt="GPON Installation Scheduler — screenshot" onerror="this.parentElement.classList.add('no-img')">
-      </div>
-      <div class="project-head">
-        <span class="project-title">GPON Installation Scheduler — Telekom</span>
-        <span class="project-year">2024</span>
-      </div>
-      <p class="project-desc">Object-oriented system built for Telekom to manage internet installation appointments — reservation scheduling, client records, and organizational tracking. Includes a visual calendar, linked object relationships, and complex multi-table data structures for managing installations at scale.</p>
-      <div class="tags"><span class="tag">OOP</span><span class="tag">Visual Calendar</span><span class="tag">Complex Data Modeling</span></div>
-    </div>
-
-    <div class="panel project" onclick="location.href='project.html?id=7'" id="project-7" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='project.html?id=7'">
-      <span class="br-tl"></span><span class="br-br"></span>
-      <div class="project-media">
-        <img src="projektislike/Screenshot_20260716_113315.png" alt="Timesheet & Project Management System — screenshot" onerror="this.parentElement.classList.add('no-img')">
-      </div>
-      <div class="project-head">
-        <span class="project-title">Timesheet &amp; Project Management System — NALED</span>
-        <span class="project-year">2024</span>
-      </div>
-      <p class="project-desc">Resource-allocation system for a 100+ employee organization. Built an interactive matrix UI with real-time hour calculations, lumpsum entry modes, and high-performance API sync between two enterprise systems.</p>
-      <div class="tags"><span class="tag">PHP</span><span class="tag">JavaScript</span><span class="tag">MySQL</span><span class="tag">API Sync</span></div>
     </div>
   </section>
 
-  <footer class="reveal">
-    <div class="panel contact-panel">
-      <span class="br-tl"></span><span class="br-br"></span>
-      <div class="tag-label" style="margin-bottom:14px;">end-of-file</div>
-      <div class="section-title">Let's build something that has to work.</div>
-      <p>Open to remote, full-time or contract roles — EU-based teams especially welcome given timezone overlap.</p>
-      <div class="contact-links">
-        <a class="btn" href="mailto:josipovicigor135@gmail.com">josipovicigor135@gmail.com</a>
-        <a class="btn ghost" href="tel:+381652504384">+381 65 250 4384</a>
+  <section class="section">
+    <div class="container two">
+      <div class="wide">
+        <div class="eyebrow">Education</div>
+        <h3>Diploma Engineer in Information Technology</h3>
+        <p>Higher School of Vocational Studies for Information Technologies (ITS) · Belgrade, Serbia · 2019 – 2023</p>
+      </div>
+      <div class="narrow">
+        <div class="eyebrow">Languages</div>
+        <p class="plain">Serbian · native<br>English · advanced</p>
       </div>
     </div>
-    <div class="foot-note">© 2026 IGOR JOSIPOVIĆ — BUILT WITH HTML / CSS, NO FRAMEWORK</div>
-  </footer>
-</div>
+  </section>
 
-<script>
-  const revealEls = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
-  revealEls.forEach(el => io.observe(el));
+  <section class="contact-wrap" id="contact">
+    <div class="container">
+      <div class="contact">
+        <div class="contact-copy">
+          <div class="eyebrow">Contact</div>
+          <h2>Have a backend or AI integration project?</h2>
+          <p>Write to me with a short description of what you need built or automated.</p>
+        </div>
+        <dl class="contact-list">
+          <div><dt>Email</dt><dd><a href="mailto:josipovicigor135@gmail.com">josipovicigor135@gmail.com</a></dd></div>
+          <div><dt>Phone</dt><dd>+381 652504384</dd></div>
+          <div><dt>LinkedIn</dt><dd><a href="https://linkedin.com/in/igor-josipovic-fullstack">linkedin.com/in/igor-josipovic-fullstack</a></dd></div>
+          <div><dt>GitHub Pages</dt><dd><a href="https://igor0011.github.io">igor0011.github.io</a></dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
 
-  // Ako se stiže sa project.html preko "Back to projects", URL nosi #project-N —
-  // odmah otkrij tu sekciju (bez čekanja na scroll) i skroluj/istakni taj projekat.
-  if(location.hash && location.hash.startsWith('#project-')){
-    const target = document.querySelector(location.hash);
-    if(target){
-      const parentSection = target.closest('.reveal');
-      if(parentSection){ parentSection.classList.add('in'); io.unobserve(parentSection); }
+</main>
 
-      requestAnimationFrame(() => {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        target.classList.add('focused');
-        setTimeout(() => target.classList.remove('focused'), 2200);
-      });
-    }
-  }
-</script>
-
-<script>
-(function(){
-  // Soft, scroll-linked ambient background — no mouse tracking, no constantly
-  // moving elements. The grid drifts a few px with scroll (parallax) and two
-  // slow, quiet glows breathe in place. Everything is eased, nothing snaps.
-  const canvas = document.getElementById('bg-canvas');
-  const ctx = canvas.getContext('2d');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const CELL = 48;
-  let w, h, cols, rows, dpr;
-  let docHeight = 1;
-
-  let scrollT = 0;       // raw scroll progress 0..1
-  let scrollTEased = 0;  // eased, lags gently behind
-  let breathe = 0;       // slow independent clock for the glow pulse
-
-  function resize(){
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = window.innerWidth;
-    h = window.innerHeight;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cols = Math.ceil(w / CELL) + 2;
-    rows = Math.ceil(h / CELL) + 2;
-    docHeight = Math.max(document.documentElement.scrollHeight - h, 1);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  function onScroll(){
-    scrollT = window.scrollY / docHeight;
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  function draw(){
-    ctx.clearRect(0, 0, w, h);
-
-    // ease scroll progress toward its target — slow, soft catch-up
-    scrollTEased += (scrollT - scrollTEased) * 0.06;
-    breathe += 0.0035;
-
-    // grid drifts a small number of px based on eased scroll — barely perceptible
-    const driftX = (scrollTEased - 0.5) * CELL * 0.6;
-    const driftY = scrollTEased * CELL * 1.2;
-
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(159,179,200,0.055)';
-    ctx.beginPath();
-    for(let x=-1; x<=cols; x++){
-      const gx = x*CELL + (driftX % CELL);
-      ctx.moveTo(gx, 0); ctx.lineTo(gx, h);
-    }
-    for(let y=-1; y<=rows; y++){
-      const gy = y*CELL + (driftY % CELL);
-      ctx.moveTo(0, gy); ctx.lineTo(w, gy);
-    }
-    ctx.stroke();
-
-    requestAnimationFrame(draw);
-  }
-
-  if(reduceMotion){
-    // single static, centered frame — no drift, no breathing
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(159,179,200,0.055)';
-    ctx.beginPath();
-    for(let x=0; x<=cols; x++){ ctx.moveTo(x*CELL, 0); ctx.lineTo(x*CELL, h); }
-    for(let y=0; y<=rows; y++){ ctx.moveTo(0, y*CELL); ctx.lineTo(w, y*CELL); }
-    ctx.stroke();
-  } else {
-    requestAnimationFrame(draw);
-  }
-})();
-</script>
+<footer class="footer">
+  <div class="container">© 2026 Igor Josipović · Belgrade, Serbia</div>
+</footer>
 
 </body>
 </html>
